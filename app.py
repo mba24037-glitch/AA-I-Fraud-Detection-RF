@@ -99,7 +99,7 @@ st.markdown(
 # =========================
 #  Sidebar
 # =========================
-st.sidebar.title("🕵️ Loan Fraud Detection")
+st.sidebar.title(" Loan Fraud Detection")
 
 st.sidebar.markdown(
     """
@@ -107,6 +107,7 @@ st.sidebar.markdown(
     using **Random Forest** and transaction indicators.
 
     **Steps**
+    
     1️⃣ Fill in the key fields  
     2️⃣ Click **Predict Fraud**  
     3️⃣ Review fraud risk band  
@@ -136,7 +137,7 @@ with st.form("prediction_form"):
     col1, col2 = st.columns(2)
 
     with col1:
-        st.markdown("### 👤 Applicant & Loan Details")
+        st.markdown("###  Applicant & Loan Details")
         applicant_age = st.number_input("Age", 18, 99, 30)
         monthly_income = st.number_input("Monthly Income (₹)", min_value=0, value=40000)
         loan_tenure_months = st.number_input("Loan Tenure (months)", 1, 360, 60)
@@ -145,7 +146,7 @@ with st.form("prediction_form"):
         existing_emis_monthly = st.number_input("Existing EMIs (₹)", 0, 200000, 0)
 
     with col2:
-        st.markdown("### 📊 Transaction Indicators")
+        st.markdown("###  Transaction Indicators")
         debt_to_income_ratio = st.number_input("Debt-to-Income Ratio", 0.0, 5.0, 0.35, step=0.01)
         txn_failed_count = st.number_input("Failed Transactions", 0, 50, 2)
         txn_avg_amount = st.number_input("Average Txn Amount (₹)", 0, 200000, 2000)
