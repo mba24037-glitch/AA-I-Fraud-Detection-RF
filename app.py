@@ -27,43 +27,70 @@ st.set_page_config(
 )
 
 # =========================
-#  Light-blue professional theme (CSS)
+#  DARK BLUE Theme (Fintech-style)
 # =========================
 st.markdown(
     """
     <style>
-    /* Main background */
+    
+    /* Background */
     [data-testid="stAppViewContainer"] {
-        background: #f4f7fb;
+        background: #0a1a2f !important;
+        color: #eaf4ff !important;
     }
-    /* Sidebar background */
+
+    /* Sidebar */
     [data-testid="stSidebar"] {
-        background-color: #e6f0ff;
+        background-color: #0d233d !important;
     }
-    /* Headers */
-    h1, h2, h3 {
-        color: #0f4c81;
+
+    /* Input fields */
+    .stNumberInput input, .stTextInput input {
+        background-color: #1a2e49 !important;
+        color: #eaf4ff !important;
+        border-radius: 8px;
+        border: 1px solid #3e5570;
     }
-    /* Section titles inside markdown */
-    h1 span, h2 span, h3 span {
-        color: #0f4c81;
+
+    /* Dropdowns */
+    .stSelectbox div[data-baseweb="select"] * {
+        background-color: #1a2e49 !important;
+        color: white !important;
     }
+
+    /* Titles & subtitles */
+    h1, h2, h3, label, p, span, div {
+        color: #eaf4ff !important;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
     /* Buttons */
     div.stButton > button {
-        background-color: #0f4c81;
-        color: white;
-        border-radius: 8px;
-        border: none;
-        padding: 0.4rem 0.75rem;
+        background-color: #0077ff !important;
+        color: white !important;
+        border-radius: 8px !important;
+        border: none !important;
+        padding: 0.5rem 1.2rem !important;
+        font-weight: 600 !important;
     }
     div.stButton > button:hover {
-        background-color: #0c3a63;
-        color: white;
+        background-color: #005fcc !important;
     }
-    /* Metric label */
-    [data-testid="stMetricLabel"] > div {
-        color: #0f4c81;
+
+    /* Cards */
+    .card {
+        background-color: #11243d !important;
+        padding: 1rem;
+        border-radius: 8px;
+        border: 1px solid #1f3a5f;
     }
+
+    /* Metrics text */
+    [data-testid="stMetricLabel"], 
+    [data-testid="stMetricValue"] {
+        color: white !important;
+    }
+
     </style>
     """,
     unsafe_allow_html=True,
@@ -76,206 +103,118 @@ st.sidebar.title("🕵️ Loan Fraud Detection")
 
 st.sidebar.markdown(
     """
-    This dashboard estimates the **likelihood of fraud** for a loan application  
-    using a **Random Forest model** trained on historical applications  
-    and transaction behaviour.
-    
-    **How to use:**
-    1. Fill in the key fields on the right  
-    2. Click **Predict Fraud**  
-    3. Review the probability and risk band
+    A professional dashboard estimating fraud likelihood
+    using **Random Forest** and transaction indicators.
+
+    **Steps**
+    1️⃣ Fill in the key fields  
+    2️⃣ Click **Predict Fraud**  
+    3️⃣ Review fraud risk band  
     """
 )
 
 st.sidebar.markdown("---")
-st.sidebar.markdown("**Risk Legend**")
-st.sidebar.markdown("🟢 **Low** : p < 20%")
-st.sidebar.markdown("🟠 **Medium** : 20% ≤ p < 50%")
-st.sidebar.markdown("🔴 **High** : p ≥ 50%")
-
+st.sidebar.markdown("**Risk Levels**")
+st.sidebar.markdown("🟢 Low Risk <20%")
+st.sidebar.markdown("🟠 Medium Risk 20–50%")
+st.sidebar.markdown("🔴 High Risk ≥50%")
 st.sidebar.markdown("---")
-st.sidebar.caption("Academic project – not for real-world credit decisions.")
 
 # =========================
 #  Header
 # =========================
 st.markdown(
-    """
-    <h1 style="text-align:center; margin-bottom:0.2rem;">
-        Loan Fraud Risk Dashboard
-    </h1>
-    <p style="text-align:center; color:gray; font-size:0.95rem;">
-        Uses applicant profile, loan details and key transactional indicators to estimate
-        the probability that an application is fraudulent.
-    </p>
-    """,
+    "<h1 style='text-align:center;'>Loan Fraud Risk Dashboard</h1>",
     unsafe_allow_html=True,
 )
 st.markdown("---")
 
 # =========================
-#  Input Form (only 12 top features)
+#  Input Form
 # =========================
 with st.form("prediction_form"):
-
     col1, col2 = st.columns(2)
 
-    # -------- Left column: Applicant & Loan --------
     with col1:
         st.markdown("### 👤 Applicant & Loan Details")
+        applicant_age = st.number_input("Age", 18, 99, 30)
+        monthly_income = st.number_input("Monthly Income (₹)", min_value=0, value=40000)
+        loan_tenure_months = st.number_input("Loan Tenure (months)", 1, 360, 60)
+        interest_rate_offered = st.number_input("Interest Rate (%)", 0.0, 30.0, 12.0)
+        number_of_dependents = st.number_input("Dependents", 0, 10, 1)
+        existing_emis_monthly = st.number_input("Existing EMIs (₹)", 0, 200000, 0)
 
-        applicant_age = st.number_input(
-            "Applicant Age (years)", min_value=18, max_value=99, value=30
-        )
-        monthly_income = st.number_input(
-            "Monthly Income (₹)", min_value=0, value=50_000
-        )
-        loan_tenure_months = st.number_input(
-            "Loan Tenure (months)", min_value=1, value=60
-        )
-        interest_rate_offered = st.number_input(
-            "Interest Rate (%)", min_value=0.0, value=12.0
-        )
-        number_of_dependents = st.number_input(
-            "Number of Dependents", min_value=0, max_value=10, value=0
-        )
-        existing_emis_monthly = st.number_input(
-            "Existing EMIs (monthly, ₹)", min_value=0, value=0
-        )
-
-    # -------- Right column: Risk & Transactions --------
     with col2:
-        st.markdown("### 📊 Risk & Transaction Indicators")
+        st.markdown("### 📊 Transaction Indicators")
+        debt_to_income_ratio = st.number_input("Debt-to-Income Ratio", 0.0, 5.0, 0.35, step=0.01)
+        txn_failed_count = st.number_input("Failed Transactions", 0, 50, 2)
+        txn_avg_amount = st.number_input("Average Txn Amount (₹)", 0, 200000, 2000)
+        txn_total_amount = st.number_input("Total Txn Amount (₹)", 0, 2000000, 50000)
+        txn_avg_balance_after = st.number_input("Avg Balance After Txn (₹)", 0, 500000, 15000)
+        cibil_score = st.number_input("CIBIL Score", 300, 900, 750)
 
-        debt_to_income_ratio = st.number_input(
-            "Debt-to-Income Ratio", min_value=0.0, value=0.30, format="%.2f"
-        )
-        txn_failed_count = st.number_input(
-            "Failed Transactions (count)", min_value=0, value=0
-        )
-        txn_avg_amount = st.number_input(
-            "Average Transaction Amount (₹)", min_value=0, value=2_000
-        )
-        txn_total_amount = st.number_input(
-            "Total Transaction Amount (₹)", min_value=0, value=40_000
-        )
-        txn_avg_balance_after = st.number_input(
-            "Average Balance After Transaction (₹)", min_value=0, value=15_000
-        )
-        cibil_score = st.number_input(
-            "CIBIL Score", min_value=300, max_value=900, value=750
-        )
-
-    st.markdown("")
-    submit_col, _, _ = st.columns([1, 3, 3])
-    with submit_col:
-        submitted = st.form_submit_button("🔍 Predict Fraud", use_container_width=True)
+    submitted = st.form_submit_button("🔍 Predict Fraud")
 
 # =========================
-#  Prediction Logic
+#  Prediction Logic + Progress Bar
 # =========================
 if submitted:
+    with st.spinner("Evaluating risk score..."):
+        progress = st.progress(0)
+        for i in range(100):
+            time.sleep(0.02)  # ~2 sec
+            progress.progress(i + 1)
 
-    # ---- Progress & spinner (fake 2-second run to feel realistic) ----
-    with st.spinner("Running fraud risk model..."):
-        progress_placeholder = st.empty()
-        progress_bar = progress_placeholder.progress(0)
-        for i in range(0, 101, 5):
-            time.sleep(0.1)   # 0.1 * 20 ≈ 2 seconds total
-            progress_bar.progress(i)
+    # Create complete feature vector
+    row = {col: 0.0 for col in numeric_features}
+    for col, opts in categorical_schema.items():
+        row[col] = opts[0] if opts else None
 
-        # ---- 1) Start with default values for ALL model features ----
-        input_data: dict[str, object] = {}
+    row.update({
+        "txn_failed_count": txn_failed_count,
+        "applicant_age": applicant_age,
+        "monthly_income": monthly_income,
+        "loan_tenure_months": loan_tenure_months,
+        "debt_to_income_ratio": debt_to_income_ratio,
+        "txn_avg_amount": txn_avg_amount,
+        "txn_total_amount": txn_total_amount,
+        "txn_avg_balance_after": txn_avg_balance_after,
+        "existing_emis_monthly": existing_emis_monthly,
+        "number_of_dependents": number_of_dependents,
+        "interest_rate_offered": interest_rate_offered,
+        "cibil_score": cibil_score,
+    })
 
-        # numeric: default 0.0
-        for col in numeric_features:
-            input_data[col] = 0.0
+    X_input = pd.DataFrame([row])
+    probability = float(model.predict_proba(X_input)[0][1])
+    flagged = probability >= threshold
 
-        # categorical: default to first known category
-        for col, options in categorical_schema.items():
-            input_data[col] = options[0] if options else None
-
-        # ---- 2) Overwrite with values from form (12 top features) ----
-        input_data.update({
-            "txn_failed_count": txn_failed_count,
-            "applicant_age": applicant_age,
-            "monthly_income": monthly_income,
-            "loan_tenure_months": loan_tenure_months,
-            "debt_to_income_ratio": debt_to_income_ratio,
-            "txn_avg_amount": txn_avg_amount,
-            "txn_total_amount": txn_total_amount,
-            "txn_avg_balance_after": txn_avg_balance_after,
-            "existing_emis_monthly": existing_emis_monthly,
-            "number_of_dependents": number_of_dependents,
-            "interest_rate_offered": interest_rate_offered,
-            "cibil_score": cibil_score,
-        })
-
-        # ---- 3) Build DataFrame & predict ----
-        X_input = pd.DataFrame([input_data])
-        prob_fraud = float(model.predict_proba(X_input)[0][1])
-        is_fraud = prob_fraud >= threshold
-
-    # clear progress bar after done
-    progress_placeholder.empty()
-
-    # =========================
-    #  Result Display
-    # =========================
     st.markdown("---")
-    st.subheader("Prediction Summary")
+    st.subheader("📈 Prediction Summary")
 
-    left, right = st.columns([1.2, 1])
+    col_a, col_b = st.columns(2)
 
-    # ---- Left: Probability + Risk badge ----
-    with left:
-        st.metric("Fraud Probability", f"{prob_fraud * 100:.2f}%")
+    # Probability + Risk Badge
+    with col_a:
+        st.metric("Fraud Probability", f"{probability*100:.2f}%")
 
-        if prob_fraud < 0.20:
-            risk_label = "Low Risk"
-            emoji = "🟢"
-        elif prob_fraud < 0.50:
-            risk_label = "Medium Risk"
-            emoji = "🟠"
+        if probability < 0.20:
+            st.success("🟢 **Low Risk**")
+        elif probability < 0.50:
+            st.warning("🟠 **Medium Risk**")
         else:
-            risk_label = "High Risk"
-            emoji = "🔴"
+            st.error("🔴 **High Risk**")
 
-        st.markdown(
-            f"""
-            <div style="
-                padding: 0.8rem 1rem;
-                border-radius: 0.5rem;
-                background-color: #ffffff;
-                border: 1px solid #d1d5db;
-                ">
-                <span style="font-size:1.1rem;">{emoji} <b>{risk_label}</b></span><br>
-                <span style="font-size:0.9rem; color:#4b5563;">
-                    Model decision threshold: <b>{threshold:.2f}</b><br>
-                    If probability ≥ threshold, the application is flagged as <b>fraud</b>.
-                </span>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-
-    # ---- Right: Interpretation text ----
-    with right:
-        st.markdown("**Interpretation**")
-        if is_fraud:
+    # Risk Statement
+    with col_b:
+        if flagged:
             st.error(
-                "The model flags this application as **likely fraudulent**. "
-                "Recommend detailed manual review, document verification, "
-                "and closer inspection of recent transactions."
+                "⚠️ System recommends **fraud investigation** — "
+                "verify employment, financial statements & device history."
             )
         else:
             st.success(
-                "The model considers this application **likely legitimate**. "
-                "It is still recommended to combine this with standard KYC "
-                "and risk checks."
+                "✔ Likely **legitimate** — still cross-verify with KYC & credit rules."
             )
 
-    st.caption(
-        "Note: This dashboard is designed for learning and demonstration only. "
-        "It should not be used as the sole basis for real-world lending decisions."
-    )
+    st.caption("⚠ AI model usage for academic & demonstration purposes only.")
