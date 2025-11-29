@@ -19,8 +19,8 @@ categorical_schema = schema["categorical"]
 
 st.set_page_config(page_title="Loan Fraud Detection", page_icon="🕵️", layout="centered")
 
-st.title("🕵️ Loan Fraud Detection")
-st.write("Predict likelihood of fraud for a loan application.")
+st.title(" Loan Fraud Detection")
+st.write("Predict likelihood of fraud for a loan application using his past Transaction history and Load Application.")
 
 st.markdown("---")
 
