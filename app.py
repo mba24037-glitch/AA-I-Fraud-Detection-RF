@@ -125,7 +125,7 @@ st.sidebar.markdown("---")
 #  Header
 # =========================
 st.markdown(
-    "<h1 style='text-align:center;'>Loan Fraud Risk Dashboard</h1>",
+    "<h1 style='text-align:center;'>Loan Fraud Risk Detection Dashboard</h1>",
     unsafe_allow_html=True,
 )
 st.markdown("---")
