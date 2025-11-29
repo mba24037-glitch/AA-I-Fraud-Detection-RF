@@ -1,0 +1,57 @@
+{
+  "numeric": [
+    "loan_amount_requested",
+    "monthly_income",
+    "loan_tenure_months",
+    "interest_rate_offered",
+    "cibil_score",
+    "existing_emis_monthly",
+    "applicant_age",
+    "number_of_dependents",
+    "debt_to_income_ratio",
+    "txn_count_before_app",
+    "txn_avg_amount",
+    "txn_total_amount",
+    "txn_failed_count",
+    "txn_international_count",
+    "txn_avg_balance_after",
+    "txn_distinct_merchants",
+    "txn_distinct_devices"
+  ],
+  "categorical": {
+    "gender": [
+      "Female",
+      "Male",
+      "Other"
+    ],
+    "loan_type": [
+      "Business Loan",
+      "Car Loan",
+      "Education Loan",
+      "Home Loan",
+      "Personal Loan"
+    ],
+    "employment_status": [
+      "Business Owner",
+      "Retired",
+      "Salaried",
+      "Self-Employed",
+      "Student",
+      "Unemployed"
+    ],
+    "property_ownership_status": [
+      "Jointly Owned",
+      "Owned",
+      "Rented"
+    ],
+    "purpose_of_loan": [
+      "Business Expansion",
+      "Debt Consolidation",
+      "Education",
+      "Home Renovation",
+      "Medical Emergency",
+      "Vehicle Purchase",
+      "Wedding"
+    ]
+  }
+}
